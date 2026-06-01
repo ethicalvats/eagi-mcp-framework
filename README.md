@@ -78,11 +78,25 @@ The gateway exposes a unified MCP SSE endpoint at `http://localhost:3000/sse` wi
 
 ---
 
+## Solving the 1000+ Tools Scaling Problem
+
+One of the most common enterprise pain points is **tool bloat**. Loading hundreds or thousands of tools into the LLM context is slow, expensive, and degrades the model's reasoning capabilities.
+
+EAGI solves this natively by decoupling the control plane (Go Gateway) from the execution plane (TypeScript SDK):
+* **Identity Projection (RBAC)**: Prunes the toolset sent to the LLM by dynamically hiding tools the user's OAuth/JWT role is unauthorized to use.
+* **Dynamic Tool Retrieval (Tool-RAG)**: Uses our powerful Hook Engine (`filter:tools:list`) to interface with vector databases and load only the 3–5 most semantically relevant tools based on user query intent.
+* **Domain Partitioning**: Splits monolithic backends into isolated, lightweight domain background processes managed by the gateway.
+
+For more details, see the [Context & Tool Scaling Guide](./docs/scaling.md).
+
+---
+
 ## Documentation
 
 For deep dives into EAGI architecture and building custom domains:
 - 📖 [Getting Started Guide](./docs/getting-started.md)
 - 🔑 [Advanced Hooks & Identity Guide](./docs/hooks-and-identity.md)
+- ⚡ [Context & Tool Scaling Guide](./docs/scaling.md)
 - 🌐 [Gateway Reference](./docs/gateway.md) *(refer to gateway codebase)*
 
 ---
