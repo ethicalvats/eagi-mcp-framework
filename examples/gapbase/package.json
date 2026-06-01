@@ -1,6 +1,7 @@
 {
   "name": "gapbase-eagi",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "eagi dev",
     "serve": "eagi serve"
