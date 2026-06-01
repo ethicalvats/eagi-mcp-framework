@@ -1,0 +1,18 @@
+[
+  {
+    "id": "gap-ecommerce-01",
+    "slug": "ecommerce-returns-fraud",
+    "industry": "ecommerce",
+    "pain": "Merchants are losing 15% of revenue to sophisticated return fraud (wardrobing, empty box returns).",
+    "solution": "AI-based visual return verification flow using customer smartphones before the return label is issued.",
+    "role": "Operations Manager"
+  },
+  {
+    "id": "gap-dental-01",
+    "slug": "dental-no-shows",
+    "industry": "dental",
+    "pain": "High no-show rates for Friday afternoon appointments costing clinics thousands.",
+    "solution": "Automated waitlist CRM that instantly texts patients on the waitlist when a Friday cancellation happens, auto-booking the first responder.",
+    "role": "Practice Manager"
+  }
+]

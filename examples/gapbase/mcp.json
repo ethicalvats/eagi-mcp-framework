@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "gapbase-local-stdio": {
+      "command": "npx",
+      "args": ["eagi", "serve"],
+      "env": {}
+    },
+    "gapbase-production-gateway": {
+      "url": "http://localhost:3000/sse",
+      "env": {
+        "AUTHORIZATION": "Bearer <your-jwt-token>"
+      }
+    }
+  }
+}

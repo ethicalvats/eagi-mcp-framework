@@ -1,0 +1,13 @@
+{
+  "name": "gapbase-eagi",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "eagi dev",
+    "serve": "eagi serve"
+  },
+  "dependencies": {
+    "@eagi/cli": "workspace:*",
+    "@eagi/sdk": "workspace:*",
+    "zod": "^3.22.4"
+  }
+}
