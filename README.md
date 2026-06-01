@@ -82,7 +82,7 @@ The gateway exposes a unified MCP SSE endpoint at `http://localhost:3000/sse` wi
 
 For deep dives into EAGI architecture and building custom domains:
 - 📖 [Getting Started Guide](./docs/getting-started.md)
-- 🔌 [Extending with Hooks](./docs/hooks.md) *(refer to SDK codebase)*
+- 🔑 [Advanced Hooks & Identity Guide](./docs/hooks-and-identity.md)
 - 🌐 [Gateway Reference](./docs/gateway.md) *(refer to gateway codebase)*
 
 ---
