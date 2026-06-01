@@ -1,4 +1,4 @@
-name: Release
+name: Release Go Gateway
 
 on:
   push:
@@ -10,39 +10,6 @@ permissions:
   contents: write
 
 jobs:
-  publish-npm:
-    name: Publish NPM Packages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-
-      - name: Configure NPM Auth
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build Packages
-        run: pnpm build
-
-      - name: Publish to NPM
-        run: pnpm -r publish --no-git-checks --access public
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
   release-gateway:
     name: Release Go Gateway Binaries
     runs-on: ubuntu-latest
