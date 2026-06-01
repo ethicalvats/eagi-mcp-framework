@@ -83,6 +83,17 @@ The gateway exposes a unified MCP SSE endpoint at `http://localhost:3000/sse` wi
 
 ---
 
+## MCP-Native & MCP-First Architecture
+
+EAGI enables you to build **MCP-Native** applications:
+* **Unified Communication**: Both your React/Next.js frontend UI and your AI agents talk directly to the Go Gateway using the same MCP standard JSON-RPC protocol over Server-Sent Events (SSE). 
+* **Single Source of Truth**: You do not write REST APIs *and* separate LLM tools. Business logic is defined once as tools (mutations) and resources (queries) in the TS Domain SDK.
+* **MCP-First strategy**: Expose and build your core system capabilities in the SDK first, making your application "Agent-Ready" from day one.
+
+For more details, see the [MCP-Native & MCP-First Guide](./docs/mcp-native.md).
+
+---
+
 ## Solving the 1000+ Tools Scaling Problem
 
 One of the most common enterprise pain points is **tool bloat**. Loading hundreds or thousands of tools into the LLM context is slow, expensive, and degrades the model's reasoning capabilities.
@@ -100,6 +111,7 @@ For more details, see the [Context & Tool Scaling Guide](./docs/scaling.md).
 
 For deep dives into EAGI architecture and building custom domains:
 - 📖 [Getting Started Guide](./docs/getting-started.md)
+- 🏗️ [MCP-Native & MCP-First Guide](./docs/mcp-native.md)
 - 🔑 [Advanced Hooks & Identity Guide](./docs/hooks-and-identity.md)
 - ⚡ [Context & Tool Scaling Guide](./docs/scaling.md)
 - 🌐 [Gateway Reference](./docs/gateway.md) *(refer to gateway codebase)*
