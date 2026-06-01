@@ -1,5 +1,10 @@
 # EAGI (eagi-mcp-framework): Enterprise Model Context Protocol Framework
 
+[![@eagi/sdk](https://img.shields.io/npm/v/@eagi/sdk?label=%40eagi%2Fsdk&color=blue)](https://www.npmjs.com/package/@eagi/sdk)
+[![@eagi/cli](https://img.shields.io/npm/v/@eagi/cli?label=%40eagi%2Fcli&color=blue)](https://www.npmjs.com/package/@eagi/cli)
+[![create-eagi](https://img.shields.io/npm/v/create-eagi?label=create-eagi&color=blue)](https://www.npmjs.com/package/create-eagi)
+[![License](https://img.shields.io/badge/license-Sustainable%20Use-orange.svg)](./LICENSE)
+
 EAGI (Enterprise AGI) is a unified, production-grade framework for building and orchestrating Model Context Protocol (MCP) servers. 
 
 Designed for scalability, auditability, and safety, EAGI splits responsibilities between a **Go Control Plane (Gateway)** and a **TypeScript Domain SDK**. This hybrid architecture offers high-performance multiplexing, routing, and background scheduling in Go alongside a fast, type-safe developer experience in TypeScript.
