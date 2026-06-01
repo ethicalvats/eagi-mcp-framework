@@ -89,4 +89,4 @@ For deep dives into EAGI architecture and building custom domains:
 
 ## License
 
-MIT License. See [LICENSE](./LICENSE) for details.
+This project is licensed under the Sustainable Use License (Fair-Code). See [LICENSE](./LICENSE) for details. For commercial hosting, SaaS integration, or white-labeled redistribution, please contact us for a commercial license.

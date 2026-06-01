@@ -1,21 +1,28 @@
-MIT License
+EAGI Sustainable Use License
+
+Version 1.0, June 2026
 
 Copyright (c) 2026 EAGI Authors
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This License governs the use of the EAGI MCP Framework (including its SDK, CLI, and Gateway). By using, copying, modifying, or distributing this software, you agree to comply with the terms of this License.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Grant of License
+Subject to the restrictions in Section 2, the authors hereby grant you a free, worldwide, non-exclusive, non-transferable, revocable license to:
+  a) Use, copy, and run the software for personal, educational, research, and internal business operations.
+  b) Modify the software's source code for your personal or internal business operations.
+  c) Distribute modifications of the software, provided that any recipient is bound by the terms of this License.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Restrictions on Commercial and Competitive Use
+You may NOT do any of the following without obtaining prior, written, explicit commercial licensing permission from the copyright holders:
+  a) Offer the software or any modified version thereof as a hosted service, Software-as-a-Service (SaaS), Platform-as-a-Service (PaaS), or managed cloud product where the core value or primary functionality derived by users comes from this software.
+  b) Sell, rent, lease, or sub-license the software, or any modified version thereof, for a fee.
+  c) Embed, bundle, or white-label the software (or any modified version thereof) inside a commercial application, platform, or hardware product that is distributed or sold to third parties.
+
+3. Professional Services Exception
+You ARE permitted to charge for professional services related to this software (such as custom domain consulting, building workflows, training, deployment help, or infrastructure management) provided that your clients host and manage their own instances under their own names and comply with Section 1 and 2 of this License.
+
+4. Intellectual Property
+All rights, title, and interest in and to the software, including copyright and other intellectual property rights, remain the exclusive property of the authors.
+
+5. Disclaimer of Warranty
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
