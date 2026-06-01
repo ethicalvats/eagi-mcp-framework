@@ -87,6 +87,22 @@ For deep dives into EAGI architecture and building custom domains:
 
 ---
 
+## Enterprise MCP Framework Comparison
+
+EAGI is designed specifically for enterprise-grade deployments. Below is a comparison of EAGI against other major SDKs and frameworks in the MCP ecosystem:
+
+| Feature | EAGI (eagi-mcp-framework) | Spring AI MCP (Java) | McpDotNet (C#) | Official SDKs (JS/Python) | FastMCP (Python) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Primary Language** | Go (Gateway) + TS (SDK) | Java | C# / .NET | TypeScript / Python | Python |
+| **Orchestration Mesh** | **Yes** (spawns & monitors child processes) | No (client only) | No (client only) | No (single server) | No (single server) |
+| **Extension Hooks** | **Yes** (Actions & Filters engine) | No | No | No | No |
+| **Identity / RBAC** | **Yes** (projects OAuth JWT to tool filters) | No (relies on Spring Security) | No | No | No |
+| **Background Triggers** | **Yes** (built-in cron / webhook runners) | No | No | No | No |
+| **Observability** | **Yes** (structured hash-chained audit logs) | Basic logging | Basic logging | Basic logging | Basic logging |
+| **Target Persona** | Production Platforms | Java Enterprise Apps | C#/.NET Enterprise Apps | Protocol Developers | Rapid Prototyping |
+
+---
+
 ## License
 
 This project is licensed under the Sustainable Use License (Fair-Code). See [LICENSE](./LICENSE) for details. For commercial hosting, SaaS integration, or white-labeled redistribution, please contact us for a commercial license.
