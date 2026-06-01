@@ -1,5 +1,5 @@
 {
-  "name": "enterprise-agi",
+  "name": "eagi",
   "private": true,
   "scripts": {
     "build": "turbo run build",
