@@ -15,15 +15,17 @@ import (
 
 // Proxy handles HTTP/SSE MCP requests and proxies them to stdio Node processes
 type Proxy struct {
-	manager  *process.Manager
-	clients  map[string]chan []byte // SSE connections
-	mu       sync.Mutex
+	manager       *process.Manager
+	clients       map[string]chan []byte // SSE connections
+	DefaultDomain string
+	mu            sync.Mutex
 }
 
 func NewProxy(manager *process.Manager) *Proxy {
 	return &Proxy{
-		manager: manager,
-		clients: make(map[string]chan []byte),
+		manager:       manager,
+		clients:       make(map[string]chan []byte),
+		DefaultDomain: "core",
 	}
 }
 
@@ -88,7 +90,7 @@ func (p *Proxy) HandleMessage(w http.ResponseWriter, r *http.Request) {
 	domain := r.Header.Get("Mcp-Domain")
 	if domain == "" {
 		// Fallback to a default domain or reject
-		domain = "core" 
+		domain = p.DefaultDomain
 	}
 
 	dp, err := p.manager.GetProcess(domain)

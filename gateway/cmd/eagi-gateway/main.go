@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
 	"github.com/eagi/gateway/internal/audit"
@@ -46,15 +48,83 @@ func main() {
 		domainDir, _ = os.Getwd()
 	}
 
-	if err := manager.StartDomain("core", domainDir); err != nil {
-		log.Printf("Warning: Failed to start 'core' domain process: %v\n", err)
-	} else {
-		// Start stdio reader to pipe MCP output back to the mesh
-		if dp, err := manager.GetProcess("core"); err == nil {
+	domainsPath := filepath.Join(domainDir, "domains")
+	entries, err := os.ReadDir(domainsPath)
+	if err != nil {
+		log.Printf("Warning: Failed to read domains directory %s: %v\n", domainsPath, err)
+	}
+
+	var bootedDomains []string
+	for _, entry := range entries {
+		if entry.IsDir() {
+			domainName := entry.Name()
+			if err := manager.StartDomain(domainName, domainDir); err != nil {
+				log.Printf("Warning: Failed to start '%s' domain process: %v\n", domainName, err)
+				continue
+			}
+			
+			bootedDomains = append(bootedDomains, domainName)
+			log.Printf("[Gateway] Successfully started domain process: %s\n", domainName)
+
+			dp, err := manager.GetProcess(domainName)
+			if err != nil {
+				log.Printf("Warning: Failed to retrieve process for %s: %v\n", domainName, err)
+				continue
+			}
+
 			proxyMesh.StartStdioReader(dp)
-			// Mocking a registration
-			rtr.RegisterDomainTools("core", []byte("{\"result\":{\"tools\":[{\"name\":\"search_gaps\"}]}}"))
+
+			// Discover tools dynamically by reading tools directory
+			toolsPath := filepath.Join(domainsPath, domainName, "tools")
+			toolEntries, err := os.ReadDir(toolsPath)
+			var toolNames []string
+			if err == nil {
+				for _, toolEntry := range toolEntries {
+					if !toolEntry.IsDir() {
+						filename := toolEntry.Name()
+						// Check if TS or JS file
+						if len(filename) > 3 && (filename[len(filename)-3:] == ".ts" || filename[len(filename)-3:] == ".js") {
+							toolName := filename[:len(filename)-3]
+							toolNames = append(toolNames, toolName)
+						}
+					}
+				}
+			}
+
+			// Register discovered tools
+			if len(toolNames) > 0 {
+				type ToolItem struct {
+					Name string `json:"name"`
+				}
+				type ToolsResult struct {
+					Tools []ToolItem `json:"tools"`
+				}
+				type ToolsResponse struct {
+					Result ToolsResult `json:"result"`
+				}
+
+				respObj := ToolsResponse{
+					Result: ToolsResult{
+						Tools: make([]ToolItem, len(toolNames)),
+					},
+				}
+				for i, tName := range toolNames {
+					respObj.Result.Tools[i] = ToolItem{Name: tName}
+				}
+
+				rawToolsList, err := json.Marshal(respObj)
+				if err == nil {
+					rtr.RegisterDomainTools(domainName, rawToolsList)
+					log.Printf("[Gateway] Registered tools for domain %s: %v\n", domainName, toolNames)
+				}
+			}
 		}
+	}
+
+	if len(bootedDomains) > 0 {
+		rtr.DefaultDomain = bootedDomains[0]
+		proxyMesh.DefaultDomain = bootedDomains[0]
+		log.Printf("[Gateway] Default fallback domain set to: %s\n", bootedDomains[0])
 	}
 
 	// Start Trigger Engine

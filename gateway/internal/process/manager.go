@@ -47,7 +47,7 @@ func (m *Manager) StartDomain(name string, projectDir string) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	
 	// Assuming eagi is installed locally or via npx
-	cmd := exec.CommandContext(ctx, "npx", "eagi", "serve", "--domain", name)
+	cmd := exec.CommandContext(ctx, "npx", "eagi", "serve-domain", "--domain", name)
 	cmd.Dir = projectDir
 
 	stdin, err := cmd.StdinPipe()

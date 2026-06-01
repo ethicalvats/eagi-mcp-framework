@@ -8,13 +8,15 @@ import (
 
 // Router maintains the mapping between tool names and domain processes
 type Router struct {
-	toolToDomain map[string]string // e.g. "approve_invoice" -> "invoicing"
-	mu           sync.RWMutex
+	toolToDomain  map[string]string // e.g. "approve_invoice" -> "invoicing"
+	DefaultDomain string
+	mu            sync.RWMutex
 }
 
 func NewRouter() *Router {
 	return &Router{
-		toolToDomain: make(map[string]string),
+		toolToDomain:  make(map[string]string),
+		DefaultDomain: "core",
 	}
 }
 
@@ -81,6 +83,8 @@ func (r *Router) AnalyzeRPC(payload []byte) (string, error) {
 	}
 
 	// For resources or prompts, similar routing logic applies.
-	// For MVP, if it's not a tool call, we default to the "core" domain or reject
-	return "core", nil
+	// For MVP, if it's not a tool call, we default to the DefaultDomain or reject
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	return r.DefaultDomain, nil
 }

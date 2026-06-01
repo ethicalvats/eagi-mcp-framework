@@ -15,7 +15,7 @@ export default defineTool({
     const gap = db.gaps.find(
       (g: any) => g.id.toLowerCase() === needle || g.slug.toLowerCase() === needle
     );
-    if (!gap) return { error: \`Gap not found: \${idOrSlug}\` };
+    if (!gap) return { error: `Gap not found: ${idOrSlug}` };
     
     return { ...gap, _note: db.UPGRADE_NOTE };
   }

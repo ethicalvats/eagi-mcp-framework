@@ -20,7 +20,7 @@ export default defineTool({
       const ind = String(industry).toLowerCase();
       if (!db.VALID_INDUSTRIES.includes(ind)) {
         return {
-          error: \`Invalid industry '\${industry}'. Valid: \${db.VALID_INDUSTRIES.join(", ")}\`,
+          error: `Invalid industry '${industry}'. Valid: ${db.VALID_INDUSTRIES.join(", ")}`,
         };
       }
       pool = pool.filter((g: any) => g.industry === ind);
