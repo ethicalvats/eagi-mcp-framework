@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-ts:
+    name: Build & Test (TypeScript)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint and Format Checks
+        run: |
+          pnpm lint
+          # Ensure code is formatted (Prettier)
+          # pnpm prettier --check "**/*.{ts,tsx,js,json,md}"
+
+      - name: Build Packages
+        run: pnpm build
+
+      - name: Run Unit Tests
+        run: pnpm test
+
+  validate-go:
+    name: Build & Test (Go)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          cache-dependency-path: gateway/go.sum
+
+      - name: Install Dependencies
+        run: |
+          cd gateway
+          go mod download
+
+      - name: Go Format Check
+        run: |
+          cd gateway
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "Go code is not formatted. Please run 'go fmt ./...'"
+            gofmt -d .
+            exit 1
+          fi
+
+      - name: Compile Gateway
+        run: |
+          cd gateway
+          go build -v -o bin/eagi-gateway ./cmd/eagi-gateway
+
+      - name: Run Go Tests
+        run: |
+          cd gateway
+          go test -v ./...

@@ -1,4 +1,4 @@
-# EAGI: Enterprise AGI Framework
+# EAGI (eagi-mcp-framework): Enterprise Model Context Protocol Framework
 
 EAGI (Enterprise AGI) is a unified, production-grade framework for building and orchestrating Model Context Protocol (MCP) servers. 
 
