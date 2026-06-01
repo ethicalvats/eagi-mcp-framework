@@ -13,7 +13,7 @@ We support security updates for the current major release of the framework.
 We take the security of EAGI seriously. If you find a security vulnerability, please do **not** report it in a public issue. Instead, report it privately using one of the following methods:
 
 1. **GitHub Security Advisories**: Submit a private advisory report directly through the repository's security tab.
-2. **Email**: Email us directly at `security@eagi.dev` (or the project maintainer's email).
+2. **Email**: Email us directly at `support@agent.thevibepreneur.com` (or the project maintainer's email).
 
 Please include the following information in your report:
 - A detailed description of the vulnerability.
