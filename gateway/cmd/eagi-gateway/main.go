@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/gorilla/mux"
 	"github.com/eagi/gateway/internal/audit"
 	"github.com/eagi/gateway/internal/identity"
 	"github.com/eagi/gateway/internal/process"
@@ -15,6 +14,7 @@ import (
 	"github.com/eagi/gateway/internal/ratelimit"
 	"github.com/eagi/gateway/internal/router"
 	"github.com/eagi/gateway/internal/triggers"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -23,19 +23,19 @@ func main() {
 	// 1. Initialize core components
 	manager := process.NewManager()
 	rtr := router.NewRouter()
-	
+
 	// Read JWT secret from env
 	secret := os.Getenv("EAGI_JWT_SECRET")
 	if secret == "" {
 		secret = "dev-secret-do-not-use-in-prod"
 	}
 	identityEngine := identity.NewProjectionEngine(secret)
-	
+
 	auditLogger, err := audit.NewLogger("stdout")
 	if err != nil {
 		log.Fatalf("Failed to initialize audit logger: %v", err)
 	}
-	
+
 	limiter := ratelimit.NewLimiter()
 
 	// 2. Initialize Proxy Mesh and Triggers
@@ -62,7 +62,7 @@ func main() {
 				log.Printf("Warning: Failed to start '%s' domain process: %v\n", domainName, err)
 				continue
 			}
-			
+
 			bootedDomains = append(bootedDomains, domainName)
 			log.Printf("[Gateway] Successfully started domain process: %s\n", domainName)
 

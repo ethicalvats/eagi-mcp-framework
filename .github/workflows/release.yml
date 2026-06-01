@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish-npm:
+    name: Publish NPM Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Packages
+        run: pnpm build
+
+      - name: Publish to NPM
+        run: pnpm -r publish --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-gateway:
+    name: Release Go Gateway Binaries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Build Multi-Platform Binaries
+        run: |
+          mkdir -p dist
+          cd gateway
+          
+          # Linux AMD64
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ../dist/eagi-gateway-linux-amd64 ./cmd/eagi-gateway
+          # Linux ARM64
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ../dist/eagi-gateway-linux-arm64 ./cmd/eagi-gateway
+          
+          # macOS Intel
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o ../dist/eagi-gateway-darwin-amd64 ./cmd/eagi-gateway
+          # macOS Apple Silicon (ARM64)
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o ../dist/eagi-gateway-darwin-arm64 ./cmd/eagi-gateway
+          
+          # Windows AMD64
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o ../dist/eagi-gateway-windows-amd64.exe ./cmd/eagi-gateway
+
+      - name: Compress Binaries
+        run: |
+          cd dist
+          tar -czf eagi-gateway-linux-amd64.tar.gz eagi-gateway-linux-amd64
+          tar -czf eagi-gateway-linux-arm64.tar.gz eagi-gateway-linux-arm64
+          tar -czf eagi-gateway-darwin-amd64.tar.gz eagi-gateway-darwin-amd64
+          tar -czf eagi-gateway-darwin-arm64.tar.gz eagi-gateway-darwin-arm64
+          zip eagi-gateway-windows-amd64.zip eagi-gateway-windows-amd64.exe
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -13,15 +13,15 @@ import (
 
 // DomainProcess represents a running Node.js MCP server
 type DomainProcess struct {
-	Name      string
-	Cmd       *exec.Cmd
-	Stdin     io.WriteCloser
-	Stdout    io.ReadCloser
-	Stderr    io.ReadCloser
-	Restart   bool
-	mu        sync.Mutex
-	cancel    context.CancelFunc
-	ctx       context.Context
+	Name    string
+	Cmd     *exec.Cmd
+	Stdin   io.WriteCloser
+	Stdout  io.ReadCloser
+	Stderr  io.ReadCloser
+	Restart bool
+	mu      sync.Mutex
+	cancel  context.CancelFunc
+	ctx     context.Context
 }
 
 type Manager struct {
@@ -45,7 +45,7 @@ func (m *Manager) StartDomain(name string, projectDir string) error {
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
-	
+
 	// Assuming eagi is installed locally or via npx
 	cmd := exec.CommandContext(ctx, "npx", "eagi", "serve-domain", "--domain", name)
 	cmd.Dir = projectDir
@@ -110,7 +110,7 @@ func (m *Manager) monitorProcess(dp *DomainProcess, projectDir string) {
 		log.Printf("[Process Manager] Restarting domain %s in 2 seconds...\n", dp.Name)
 		delete(m.processes, dp.Name)
 		m.mu.Unlock()
-		
+
 		time.Sleep(2 * time.Second)
 		m.StartDomain(dp.Name, projectDir)
 	} else {
@@ -128,7 +128,7 @@ func (m *Manager) StopDomain(name string) {
 		dp.mu.Lock()
 		dp.Restart = false
 		dp.mu.Unlock()
-		
+
 		dp.cancel()
 		log.Printf("[Process Manager] Stopped domain %s\n", name)
 	}
@@ -137,7 +137,7 @@ func (m *Manager) StopDomain(name string) {
 func (m *Manager) GetProcess(name string) (*DomainProcess, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	
+
 	if dp, exists := m.processes[name]; exists {
 		return dp, nil
 	}

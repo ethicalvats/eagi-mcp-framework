@@ -40,7 +40,7 @@ func (p *ProjectionEngine) Authenticate(next http.Handler) http.Handler {
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-		
+
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -56,7 +56,7 @@ func (p *ProjectionEngine) Authenticate(next http.Handler) http.Handler {
 		if claims, ok := token.Claims.(jwt.MapClaims); ok {
 			userID, _ := claims["sub"].(string)
 			role, _ := claims["role"].(string)
-			
+
 			if role == "" {
 				role = "viewer" // default
 			}
@@ -64,7 +64,7 @@ func (p *ProjectionEngine) Authenticate(next http.Handler) http.Handler {
 			// Pass identity down to the proxy via headers (stateless)
 			r.Header.Set("X-EAGI-Role", role)
 			r.Header.Set("X-EAGI-User", userID)
-			
+
 			// Optional: Encode full claims as JSON header
 			claimsJSON, _ := json.Marshal(claims)
 			r.Header.Set("X-EAGI-Claims", string(claimsJSON))
@@ -99,7 +99,7 @@ func (p *ProjectionEngine) ProjectToolsList(rawJSON []byte, role string) ([]byte
 	// but identity projection is about NOT SHOWING them.
 	// Since we don't have the domain.yaml loaded into Go memory for this simple example,
 	// we skip deep filtering. In production, Gateway loads `domain.yaml` and does RBAC.
-	
+
 	filteredTools := make([]interface{}, 0)
 	for _, t := range tools {
 		toolMap := t.(map[string]interface{})

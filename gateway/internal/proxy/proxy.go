@@ -104,7 +104,7 @@ func (p *Proxy) HandleMessage(w http.ResponseWriter, r *http.Request) {
 
 	// The process's stdout needs to be continuously read and broadcast to the SSE channel.
 	// This is handled by a background reader per domain.
-	
+
 	w.WriteHeader(http.StatusAccepted)
 }
 
@@ -114,11 +114,11 @@ func (p *Proxy) StartStdioReader(dp *process.DomainProcess) {
 		scanner := bufio.NewScanner(dp.Stdout)
 		// Max token size for large JSON payloads
 		buf := make([]byte, 0, 64*1024)
-		scanner.Buffer(buf, 10*1024*1024) 
+		scanner.Buffer(buf, 10*1024*1024)
 
 		for scanner.Scan() {
 			msg := scanner.Bytes()
-			
+
 			// Broadcast to all connected clients (In a real setup, we route based on JSON-RPC ID)
 			// For this MVP, we broadcast to all active SSE connections.
 			p.mu.Lock()

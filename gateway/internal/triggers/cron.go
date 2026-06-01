@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/robfig/cron/v3"
 	"github.com/eagi/gateway/internal/process"
 	"github.com/eagi/gateway/internal/router"
+	"github.com/robfig/cron/v3"
 )
 
 // Trigger represents a scheduled autonomous workflow
