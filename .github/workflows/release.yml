@@ -35,9 +35,11 @@ jobs:
         run: pnpm build
 
       - name: Publish to NPM
-        run: pnpm -r publish --no-git-checks --access public
+        run: |
+          echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+          pnpm -r publish --no-git-checks --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   release-gateway:
     name: Release Go Gateway Binaries
