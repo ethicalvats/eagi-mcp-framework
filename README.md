@@ -13,7 +13,7 @@ Designed for scalability, auditability, and safety, EAGI splits responsibilities
 
 ## Key Features
 
-- 🔌 **WordPress-style Hooks**: Robust hook engine supporting synchronous and asynchronous actions and filters (`before:tool:call`, `filter:tool:output`, etc.) to extend domain logic without modifying core server code.
+- 🔌 **Hooks**: Robust hook engine supporting synchronous and asynchronous actions and filters (`before:tool:call`, `filter:tool:output`, etc.) to extend domain logic without modifying core server code.
 - 🛡️ **Identity Projection**: Enforce Role-Based Access Control (RBAC) at the Gateway. Authenticate users via OAuth/JWT, map identities to roles, and filter available tools dynamically before the LLM sees them.
 - 🗃️ **Zod-to-MCP Schemas**: Define tool inputs using standard Zod schemas; the SDK automatically builds and validates compliant JSON schemas.
 - ⏱️ **Autonomous Triggers**: High-performance cron scheduler built into the Go gateway to run background agent workflows autonomously.
