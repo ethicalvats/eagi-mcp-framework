@@ -35,8 +35,8 @@ type Proxy struct {
 	DefaultDomain string
 	mu            sync.Mutex
 
-	transactions  map[string]originalIDMapping
-	txMu          sync.Mutex
+	transactions map[string]originalIDMapping
+	txMu         sync.Mutex
 
 	subscriptions map[string]map[string]bool // URI -> Set of SessionIDs
 	subMu         sync.Mutex
