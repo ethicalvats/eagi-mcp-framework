@@ -6,12 +6,36 @@ import {
   ReadResourceRequestSchema,
   ListPromptsRequestSchema,
   GetPromptRequestSchema,
+  ListResourceTemplatesRequestSchema,
+  SubscribeRequestSchema,
+  UnsubscribeRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import type { EagiConfig, DomainRegistry, HookEngine } from '../index';
 import { authMiddleware } from '../middleware/auth';
 import { auditMiddleware } from '../middleware/audit';
 import { approvalMiddleware } from '../middleware/approval';
+
+// Helper function to match URI templates like tasks://{id} against concrete URIs like tasks://123
+function matchUriTemplate(template: string, uri: string): Record<string, string> | null {
+  const paramNames: string[] = [];
+  const regexString = template
+    .replace(/[.+*?^${}()|[\]\\]/g, '\\$&') // escape regex chars
+    .replace(/\\\{([a-zA-Z0-9_]+)\\\}/g, (_, name) => {
+      paramNames.push(name);
+      return '([^/]+)';
+    });
+  
+  const regex = new RegExp(`^${regexString}$`);
+  const match = uri.match(regex);
+  if (!match) return null;
+
+  const params: Record<string, string> = {};
+  for (let i = 0; i < paramNames.length; i++) {
+    params[paramNames[i]] = match[i + 1];
+  }
+  return params;
+}
 
 export class EagiServerBuilder {
   constructor(
@@ -24,12 +48,14 @@ export class EagiServerBuilder {
   build(): Server {
     const server = new Server(
       { name: this.config.name, version: this.config.version },
-      { capabilities: { tools: {}, resources: {}, prompts: {} } }
+      { capabilities: { tools: {}, resources: { subscribe: true }, prompts: {} } }
     );
 
     this.registerTools(server);
     this.registerResources(server);
     this.registerPrompts(server);
+    this.registerResourceTemplates(server);
+    this.registerSubscriptions(server);
 
     return server;
   }
@@ -103,18 +129,38 @@ export class EagiServerBuilder {
 
   private registerResources(server: Server) {
     server.setRequestHandler(ListResourcesRequestSchema, async () => {
-      const resources = this.registry.getAllResources().map(r => ({
-        uri: r.uri,
-        name: r.name,
-        description: r.description,
-        mimeType: r.mimeType,
-      }));
+      // Return only static resources (no template parameters in URI)
+      const resources = this.registry.getAllResources()
+        .filter(r => !r.uri.includes('{'))
+        .map(r => ({
+          uri: r.uri,
+          name: r.name,
+          description: r.description,
+          mimeType: r.mimeType,
+        }));
       return { resources };
     });
 
     server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
       const { uri } = request.params;
-      const resource = this.registry.getAllResources().find(r => r.uri === uri); // Naive matching for now
+      
+      // Find exact match first
+      let resource = this.registry.getAllResources().find(r => r.uri === uri);
+      let params: Record<string, string> = {};
+
+      if (!resource) {
+        // Find matching template
+        for (const r of this.registry.getAllResources()) {
+          if (r.uri.includes('{')) {
+            const matchedParams = matchUriTemplate(r.uri, uri);
+            if (matchedParams) {
+              resource = r;
+              params = matchedParams;
+              break;
+            }
+          }
+        }
+      }
 
       if (!resource) {
         throw new Error(`Resource not found: ${uri}`);
@@ -133,7 +179,7 @@ export class EagiServerBuilder {
 
       await this.hooks.doAction('before:resource:read', { uri, identity });
       
-      let data = await resource.handler({} as any, ctx); // Naive param extraction
+      let data = await resource.handler(params as any, ctx);
       data = await this.hooks.applyFilters('filter:resource:data', data, ctx);
 
       await this.hooks.doAction('after:resource:read', { uri, data, identity });
@@ -141,6 +187,35 @@ export class EagiServerBuilder {
       return {
         contents: [{ uri, mimeType: resource.mimeType, text: data }]
       };
+    });
+  }
+
+  private registerResourceTemplates(server: Server) {
+    server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
+      // Return dynamic resource templates (contains '{' in URI)
+      const resourceTemplates = this.registry.getAllResources()
+        .filter(r => r.uri.includes('{'))
+        .map(r => ({
+          uriTemplate: r.uri,
+          name: r.name,
+          description: r.description,
+          mimeType: r.mimeType,
+        }));
+      return { resourceTemplates };
+    });
+  }
+
+  private registerSubscriptions(server: Server) {
+    server.setRequestHandler(SubscribeRequestSchema, async (request) => {
+      const { uri } = request.params;
+      await this.hooks.doAction('resource:subscribe', { uri });
+      return {};
+    });
+
+    server.setRequestHandler(UnsubscribeRequestSchema, async (request) => {
+      const { uri } = request.params;
+      await this.hooks.doAction('resource:unsubscribe', { uri });
+      return {};
     });
   }
 

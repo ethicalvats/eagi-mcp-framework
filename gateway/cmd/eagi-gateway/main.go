@@ -40,12 +40,36 @@ func main() {
 
 	// 2. Initialize Proxy Mesh and Triggers
 	proxyMesh := proxy.NewProxy(manager)
+	proxyMesh.Router = rtr
 	triggerEngine := triggers.NewEngine(manager, rtr)
 
 	// 3. Load Domains
 	domainDir := os.Getenv("DOMAIN_DIR")
 	if domainDir == "" {
 		domainDir, _ = os.Getwd()
+	}
+
+	// Load gateway.config.json for remote domains
+	type GatewayConfig struct {
+		RemoteDomains map[string]string `json:"remoteDomains"`
+	}
+	var gatewayConfig GatewayConfig
+	configFile := filepath.Join(domainDir, "gateway.config.json")
+	if _, err := os.Stat(configFile); err == nil {
+		data, err := os.ReadFile(configFile)
+		if err == nil {
+			if err := json.Unmarshal(data, &gatewayConfig); err != nil {
+				log.Printf("Warning: Failed to parse config file: %v\n", err)
+			} else {
+				log.Printf("[Gateway] Loaded config: %d remote domains\n", len(gatewayConfig.RemoteDomains))
+			}
+		}
+	}
+
+	// Connect and start remote domains
+	for domainName, sseURL := range gatewayConfig.RemoteDomains {
+		proxyMesh.StartRemoteDomain(domainName, sseURL)
+		log.Printf("[Gateway] Configured remote domain '%s' -> %s\n", domainName, sseURL)
 	}
 
 	domainsPath := filepath.Join(domainDir, "domains")

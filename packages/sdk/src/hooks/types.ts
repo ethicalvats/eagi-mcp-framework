@@ -28,6 +28,8 @@ export interface HookContextMap {
   'on:server:start': { config: any; domains: DomainManifest[] };
   'on:server:stop': { uptime: number; requestCount: number };
   'on:domain:load': { domain: DomainManifest };
+  'resource:subscribe': { uri: string };
+  'resource:unsubscribe': { uri: string };
 }
 
 export interface FilterDataMap {
