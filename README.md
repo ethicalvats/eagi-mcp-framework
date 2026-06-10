@@ -1,5 +1,9 @@
 # EAGI (eagi-mcp-framework): Enterprise Model Context Protocol Framework
 
+<p align="center">
+  <img src="./docs/images/eagi_infographic.png" alt="EAGI MCP Gateway Infographic" width="600" />
+</p>
+
 [![@eagi/sdk](https://img.shields.io/npm/v/@eagi/sdk?label=%40eagi%2Fsdk&color=blue)](https://www.npmjs.com/package/@eagi/sdk)
 [![@eagi/cli](https://img.shields.io/npm/v/@eagi/cli?label=%40eagi%2Fcli&color=blue)](https://www.npmjs.com/package/@eagi/cli)
 [![create-eagi](https://img.shields.io/npm/v/create-eagi?label=create-eagi&color=blue)](https://www.npmjs.com/package/create-eagi)
