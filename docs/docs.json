@@ -1,0 +1,50 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "EAGI Framework",
+  "theme": "aspen",
+  "colors": {
+    "primary": "#6366f1",
+    "light": "#8b5cf6",
+    "dark": "#4f46e5"
+  },
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "core-concepts",
+        "roadmap"
+      ]
+    },
+    {
+      "group": "Gateway & Routing",
+      "pages": [
+        "gateway/local-stdio",
+        "gateway/remote-routing"
+      ]
+    },
+    {
+      "group": "Security & Governance",
+      "pages": [
+        "security/session-isolation",
+        "security/rbac-projection",
+        "security/audit-trails"
+      ]
+    },
+    {
+      "group": "Reference & SDK",
+      "pages": [
+        "sdk/define-tools",
+        "sdk/define-resources",
+        "sdk/hooks-middleware"
+      ]
+    },
+    {
+      "group": "Limitations",
+      "pages": [
+        "limitations"
+      ]
+    }
+  ]
+}

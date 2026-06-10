@@ -90,7 +90,7 @@ EAGI enables you to build **MCP-Native** applications:
 * **Single Source of Truth**: You do not write REST APIs *and* separate LLM tools. Business logic is defined once as tools (mutations) and resources (queries) in the TS Domain SDK.
 * **MCP-First strategy**: Expose and build your core system capabilities in the SDK first, making your application "Agent-Ready" from day one.
 
-For more details, see the [MCP-Native & MCP-First Guide](./docs/mcp-native.md).
+For more details, see the [MCP-Native & MCP-First Guide](./docs/solutions/mcp-native.md).
 
 ---
 
@@ -103,17 +103,17 @@ EAGI solves this natively by decoupling the control plane (Go Gateway) from the 
 * **Dynamic Tool Retrieval (Tool-RAG)**: Uses our powerful Hook Engine (`filter:tools:list`) to interface with vector databases and load only the 3–5 most semantically relevant tools based on user query intent.
 * **Domain Partitioning**: Splits monolithic backends into isolated, lightweight domain background processes managed by the gateway.
 
-For more details, see the [Context & Tool Scaling Guide](./docs/scaling.md).
+For more details, see the [Context & Tool Scaling Guide](./docs/solutions/scaling.md).
 
 ---
 
 ## Documentation
 
 For deep dives into EAGI architecture and building custom domains:
-- 📖 [Getting Started Guide](./docs/getting-started.md)
-- 🏗️ [MCP-Native & MCP-First Guide](./docs/mcp-native.md)
-- 🔑 [Advanced Hooks & Identity Guide](./docs/hooks-and-identity.md)
-- ⚡ [Context & Tool Scaling Guide](./docs/scaling.md)
+- 📖 [Getting Started Guide](./docs/solutions/getting-started.md)
+- 🏗️ [MCP-Native & MCP-First Guide](./docs/solutions/mcp-native.md)
+- 🔑 [Advanced Hooks & Identity Guide](./docs/solutions/hooks-and-identity.md)
+- ⚡ [Context & Tool Scaling Guide](./docs/solutions/scaling.md)
 - 🌐 [Gateway Reference](./docs/gateway.md) *(refer to gateway codebase)*
 
 ---
